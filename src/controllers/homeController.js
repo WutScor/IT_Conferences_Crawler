@@ -3,7 +3,7 @@ import db from '../models/index'
 let getHomePage = async (req, res) => {
 
   try {
-    let data = await db.User.findAll()
+    let data = await db.Conferences.findAll()
     console.log(data)
     console.log('--------')
     return res.render("home.ejs", {data: JSON.stringify(data)});
