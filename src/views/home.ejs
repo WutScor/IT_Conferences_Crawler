@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IT Conferences | Home</title>
     <!-- <link rel="stylesheet" href="./assets/font/fontawesome/css/all.min.css" /> -->
-    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="../public/css/style.css" />
 
     <link
       rel="stylesheet"
@@ -89,51 +89,67 @@
                 <th scope="col">Venue</th>
               </tr>
             </thead>
-          
+
             <tbody class="body-table design-title">
               <% data.forEach(function(conference) { %>
-                <tr>
-                  <td><%= conference.Rank %></td>
-                  <td>
-                    <img src="<%= conference.Conference %>" alt="img" class="table-item-img" />
-                  </td>
-                  <td>
-                    <a target="_blank" href="<%= conference.Link2Conf%>">
-                      <%= conference.Title %>
-                    </a>
-                  </td>
-                  <td><%= conference.ImpactScore %></td>
-                  <td class="color-green" style="white-space: nowrap; width: 1%;"><%= conference.StartDate %></td>
-                  <td class="color-red" style="white-space: nowrap; width: 1%;"><%= conference.EndDate %></td>
-                  <td><%= conference.Venue %></td>
-                </tr>
+              <tr>
+                <td><%= conference.Rank %></td>
+                <td>
+                  <img
+                    src="<%= conference.Conference %>"
+                    alt="img"
+                    class="table-item-img"
+                  />
+                </td>
+                <td>
+                  <a target="_blank" href="<%= conference.Link2Conf%>">
+                    <%= conference.Title %>
+                  </a>
+                </td>
+                <td><%= conference.ImpactScore %></td>
+                <td class="color-green" style="white-space: nowrap; width: 1%">
+                  <%= conference.StartDate %>
+                </td>
+                <td class="color-red" style="white-space: nowrap; width: 1%">
+                  <%= conference.EndDate %>
+                </td>
+                <td><%= conference.Venue %></td>
+              </tr>
               <% }); %>
             </tbody>
           </table>
           <nav aria-label="...">
             <ul class="pagination">
               <li class="page-item <%= currentPage == 1 ? 'disabled' : '' %>">
-                <a class="page-link" href="<%= currentPage == 1 ? '#' : '?page=' + (currentPage - 1) %>">Previous</a>
+                <a
+                  class="page-link"
+                  href="<%= currentPage == 1 ? '#' : '?page=' + (currentPage - 1) %>"
+                  >Previous</a
+                >
               </li>
-              <% let startPage = Math.max(1, currentPage - 2); %>
-              <% let endPage = Math.min(totalPages, startPage + 4); %>
-              <% if (startPage > 1) { %>
-                <li class="page-item disabled">
-                  <a class="page-link" href="#">...</a>
-                </li>
+              <% let startPage = Math.max(1, currentPage - 2); %> <% let endPage
+              = Math.min(totalPages, startPage + 4); %> <% if (startPage > 1) {
+              %>
+              <li class="page-item disabled">
+                <a class="page-link" href="#">...</a>
+              </li>
+              <% } %> <% for(let i = startPage; i <= endPage; i++) { %>
+              <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+              </li>
+              <% } %> <% if (endPage < totalPages) { %>
+              <li class="page-item disabled">
+                <a class="page-link" href="#">...</a>
+              </li>
               <% } %>
-              <% for(let i = startPage; i <= endPage; i++) { %>
-                <li class="page-item <%= currentPage == i ? 'active' : '' %>">
-                  <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-                </li>
-              <% } %>
-              <% if (endPage < totalPages) { %>
-                <li class="page-item disabled">
-                  <a class="page-link" href="#">...</a>
-                </li>
-              <% } %>
-              <li class="page-item <%= currentPage == totalPages ? 'disabled' : '' %>">
-                <a class="page-link" href="<%= currentPage == totalPages ? '#' : '?page=' + (currentPage + 1) %>">Next</a>
+              <li
+                class="page-item <%= currentPage == totalPages ? 'disabled' : '' %>"
+              >
+                <a
+                  class="page-link"
+                  href="<%= currentPage == totalPages ? '#' : '?page=' + (currentPage + 1) %>"
+                  >Next</a
+                >
               </li>
             </ul>
           </nav>
@@ -144,6 +160,5 @@
         <div class="footer-text">IT Conferences</div>
       </div>
     </div>
-  
   </body>
 </html>

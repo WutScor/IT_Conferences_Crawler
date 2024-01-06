@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IT Conferences | Running Conferences</title>
+    <!-- <link rel="stylesheet" href="./assets/font/fontawesome/css/all.min.css" /> -->
+    <link rel="stylesheet" href="../public/css/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./upcoming.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.min.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <nav class="navbar navbar-expand-sm bg-body-tertiary">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="home.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="upcoming.html">Upcoming Conferences</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link current" href="running.html"
+                >Running Conferences</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="over.html">Over Conferences</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="planning.html">Conference Planning</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="container">
+        <div class="row">
+          <div class="action-item">
+            <div class="action-header">RUNNING CONFERENCES</div>
+          </div>
+        </div>
+        <div class="row m-3">
+          <div class="search container-fluid col-md-6 offset-md-0">
+            <form class="d-flex search-item" role="search">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button class="btn btn-outline-success" type="submit">
+                Search
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <table class="table table-hover">
+            <thead class="head-table">
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Conference</th>
+                <th scope="col">Title</th>
+                <th scope="col">Impact Score</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Venue</th>
+              </tr>
+            </thead>
+            <tbody class="body-table design-title"></tbody>
+          </table>
+          <div class="pagination-container" id="pagination-container"></div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-text">IT Conferences</div>
+      </div>
+    </div>
+  </body>
+  <script>
+    $("#pagination-container").pagination({
+      dataSource: "http://localhost:8080/IT_Conferences/running?page=1",
+      locator: "data",
+      totalNumberLocator: function (response) {
+        return response.totalConf;
+      },
+      pageSize: 10,
+      afterPageOnClick: function (event, pageNumber) {
+        loadPage(pageNumber);
+      },
+      afterPreviousOnClick: function (event, pageNumber) {
+        loadPage(pageNumber);
+      },
+      afterNextOnClick: function (event, pageNumber) {
+        loadPage(pageNumber);
+      },
+    });
+
+    function loadPage(page) {
+      const tableBody = $(".table tbody");
+      tableBody.empty();
+
+      $.ajax({
+        url: "http://localhost:8080/IT_Conferences/running?page=" + page,
+      })
+        .then((result) => {
+          displayData(result.data);
+        })
+        .catch((err) => {
+          console.log("Error from server:", err);
+        });
+    }
+
+    function displayData(displayedData) {
+      const tableBody = $(".table tbody");
+      tableBody.empty();
+
+      if (Array.isArray(displayedData)) {
+        for (let i = 0; i < displayedData.length; i++) {
+          let element = displayedData[i];
+
+          const rowHtml = `<tr>
+          <td>${element.Rank}</td>
+          <td>
+              <img
+                src="${element.Conference}"
+                alt="img"
+                class="table-item-img"
+              />
+          </td>
+          <td>
+              <a
+                target="_blank"
+                href="${element.Link2Conf}"
+              >
+                ${element.Title}
+              </a>
+          </td>
+          <td>${element.ImpactScore}</td>
+          <td class="color-green">${element.StartDate}</td>
+          <td class="color-red">${element.EndDate}</td>
+
+          <td>${element.Venue}</td>
+      </tr>`;
+
+          tableBody.append(rowHtml);
+        }
+      } else {
+        console.error("displayedData is not an array:", displayedData);
+      }
+    }
+
+    loadPage(1);
+  </script>
+</html>
