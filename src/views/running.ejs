@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IT Conferences | Over Conferences</title>
+    <title>IT Conferences | Running Conferences</title>
     <!-- <link rel="stylesheet" href="./assets/font/fontawesome/css/all.min.css" /> -->
-    <link rel="stylesheet" href="../public/css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
 
     <link
       rel="stylesheet"
@@ -29,19 +29,19 @@
         <div class="container-fluid">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="home.html">Home</a>
+              <a class="nav-link" href="home">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="upcoming.html">Upcoming Conferences</a>
+              <a class="nav-link" href="upcoming">Upcoming Conferences</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="running.html">Running Conferences</a>
+              <a class="nav-link current" href="running">Running Conferences</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link current" href="over.html">Over Conferences</a>
+              <a class="nav-link" href="over">Over Conferences</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="planning.html">Conference Planning</a>
+              <a class="nav-link" href="planning">Conference Planning</a>
             </li>
           </ul>
         </div>
@@ -50,7 +50,7 @@
       <div class="container">
         <div class="row">
           <div class="action-item">
-            <div class="action-header">OVER CONFERENCES</div>
+            <div class="action-header">RUNNING CONFERENCES</div>
           </div>
         </div>
         <div class="row m-3">
@@ -67,9 +67,7 @@
               </button>
             </form>
           </div>
-          
         </div>
-        
         <div class="row">
           <table class="table table-hover">
             <thead class="head-table">
@@ -96,7 +94,7 @@
   </body>
   <script>
     $("#pagination-container").pagination({
-      dataSource: "http://localhost:8080/IT_Conferences/over?page=1",
+      dataSource: "http://localhost:8080/data/IT_Conferences/running?page=1",
       locator: "data",
       totalNumberLocator: function (response) {
         return response.totalConf;
@@ -118,7 +116,7 @@
       tableBody.empty();
 
       $.ajax({
-        url: "http://localhost:8080/IT_Conferences/over?page=" + page,
+        url: "http://localhost:8080/data/IT_Conferences/running?page=" + page,
       })
         .then((result) => {
           displayData(result.data);
