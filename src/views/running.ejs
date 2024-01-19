@@ -216,6 +216,79 @@
 
     loadPage(1);
 
+    document
+      .getElementById("searchForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const searchValue = document.getElementById("searchInput").value;
+        const searchMode = document.getElementById("searchMode").value;
+        // document.write(searchMode);
+
+        loadPageSearch(1, searchValue, searchMode);
+
+        if (searchValue) {
+          $("#pagination-container").pagination({
+            dataSource: `http://localhost:8080/data/IT_Conferences/running/search${
+              searchMode.charAt(0).toUpperCase() + searchMode.slice(1)
+            }?name=${searchValue}&page=1`,
+            locator: "data",
+            totalNumberLocator: function (response) {
+              return response.totalConf;
+            },
+            pageSize: 10,
+            afterPageOnClick: function (event, pageNumber) {
+              loadPageSearch(pageNumber, searchValue, searchMode);
+            },
+            afterPreviousOnClick: function (event, pageNumber) {
+              loadPageSearch(pageNumber, searchValue, searchMode);
+            },
+            afterNextOnClick: function (event, pageNumber) {
+              loadPageSearch(pageNumber, searchValue, searchMode);
+            },
+          });
+          loadPageSearch(1, searchValue);
+        } else {
+          loadPage(1);
+          $("#pagination-container").pagination({
+            dataSource:
+              "http://localhost:8080/data/IT_Conferences/running?page=1",
+            locator: "data",
+            totalNumberLocator: function (response) {
+              return response.totalConf;
+            },
+            pageSize: 10,
+            afterPageOnClick: function (event, pageNumber) {
+              loadPage(pageNumber);
+            },
+            afterPreviousOnClick: function (event, pageNumber) {
+              loadPage(pageNumber);
+            },
+            afterNextOnClick: function (event, pageNumber) {
+              loadPage(pageNumber);
+            },
+          });
+        }
+      });
+
+    function loadPageSearch(page, searchValue, searchMode) {
+      const tableBody = $(".table tbody");
+      tableBody.empty();
+
+      $.ajax({
+        url: `http://localhost:8080/data/IT_Conferences/running/search${
+          searchMode.charAt(0).toUpperCase() + searchMode.slice(1)
+        }?name=${searchValue}&page=${page}`,
+      })
+        .then((result) => {
+          // console.log(result)
+          displayData(result.data);
+        })
+        .catch((err) => {
+          console.log("Error from server:", err);
+        });
+    }
+
     function sortTable(n) {
       var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount;
       table = document.getElementById("myTable2");
