@@ -1,29 +1,42 @@
 import express from "express";
 import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
+const path = require('path')
 //import initWebRoutes from "./route/web";
 import connectDB from "./config/connectDB";
+const handlebars = require('express-handlebars')
+
 
 const cors = require("cors");
-
 require("dotenv").config();
 
 let app = express();
 
-//config app
+app.set('view engine', 'hbs');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.engine('hbs', handlebars.engine({
+    layoutsDir: path.join(__dirname, 'views/layouts'),
+    defaultLayout: 'index',
+    extname: 'hbs',
+    partialsDir: 'views/partials/'
+}));
 
-viewEngine(app);
-//initWebRoutes(app);
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+
+
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+// viewEngine(app);
+app.use(express.static('public'));
+
+
 connectDB();
 let port = process.env.PORT || 6969;
 
-app.listen(port, () => {
-  //callback
-  console.log("Backend IT Conferences Crawler is running on the port: " + port);
-});
 
 // middleware
 app.use(cors());
@@ -41,3 +54,8 @@ app.use("/IT_Conferences", UpcomingRouter);
 app.use("/IT_Conferences", RunningRouter);
 app.use("/IT_Conferences", OverRouter);
 app.use("/IT_Conferences", PlanningRouter);
+
+app.listen(port, () => {
+  //callback
+  console.log(`Backend IT Conferences Crawler is running on: http://localhost:${port}/IT_Conferences/home`);
+});

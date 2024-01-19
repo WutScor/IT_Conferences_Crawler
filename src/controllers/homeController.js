@@ -14,7 +14,7 @@ let getHomePage = async (req, res) => {
     let totalItems = await db.Conferences.count(); // total records of db
     let totalPages = Math.ceil(totalItems / limit);
 
-    return res.render("home.ejs", {
+    res.render("home", {
       data: JSON.parse(JSON.stringify(data)),
       totalPages: totalPages,
       currentPage: page,
@@ -25,19 +25,19 @@ let getHomePage = async (req, res) => {
 };
 
 let getUpcomingPage = (req, res) => {
-  return res.render("upcoming.ejs");
+  return res.render("upcoming");
 };
 
 let getRunningPage = (req, res) => {
-  return res.render("running.ejs");
+  return res.render("running");
 };
 
 let getOverPage = (req, res) => {
-  return res.render("over.ejs");
+  return res.render("over");
 };
 
 let getPlanningPage = (req, res) => {
-  return res.render("planning.ejs");
+  return res.render("planning");
 };
 
 module.exports = {

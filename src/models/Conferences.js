@@ -1,5 +1,5 @@
 //import db from "../models/index";
-const db = require("../models/index");
+// const db = require("../models/index");
 ("use strict");
 const { Model } = require("sequelize");
 
@@ -19,12 +19,12 @@ module.exports = (sequelize, DataTypes) => {
         const offset = (page - 1) * pageSize;
         const limit = pageSize;
 
-        let data = await db.Conferences.findAll({
+        let data = await this.findAll({
           limit: limit,
           offset: offset,
         });
 
-        let totalItems = await db.Conferences.count(); // total records of db
+        let totalItems = await this.count(); // total records of db
         let totalPages = Math.ceil(totalItems / limit);
 
         return {

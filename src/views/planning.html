@@ -58,6 +58,11 @@
         <div class="row m-3">
           <div class="search container-fluid col-md-6 offset-md-0">
             <form class="d-flex search-item" role="search">
+              <select class="form-control me-2" id="searchMode">
+                <option value="title">Search by Title</option>
+                <option value="venue">Search by Venue</option>
+                <option value="date">Search by Start Date</option>
+              </select>
               <input
                 class="form-control me-2"
                 type="search"
@@ -69,19 +74,45 @@
               </button>
             </form>
           </div>
+          
         </div>
-
+        
         <div class="row">
           <table class="table table-hover">
             <thead class="head-table">
               <tr>
                 <th scope="col">Rank</th>
                 <th scope="col">Conference</th>
-                <th scope="col">Title</th>
-                <th scope="col">Impact Score</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">Venue</th>
+                <th scope="col">
+                  Title
+                  <button class="btn btn-outline-success" type="button" onclick="sortTable('title')">
+                    &#8595;
+                  </button>
+                </th>
+                <th scope="col">
+                  Impact Score
+                  <button class="btn btn-outline-success" type="button" onclick="sortTable('impactScore')">
+                    &#8595;
+                  </button>
+                </th>
+                <th scope="col">
+                  Start Date
+                  <button class="btn btn-outline-success" type="button" onclick="sortTable('startDate')">
+                    &#8595;
+                  </button>
+                </th>
+                <th scope="col">
+                  End Date
+                  <button class="btn btn-outline-success" type="button" onclick="sortTable('endDate')">
+                    &#8595;
+                  </button>
+                </th>
+                <th scope="col">
+                  Venue
+                  <button class="btn btn-outline-success" type="button" onclick="sortTable('venue')">
+                    &#8595;
+                  </button>
+                </th>
               </tr>
             </thead>
             <tbody class="body-table design-title"></tbody>
