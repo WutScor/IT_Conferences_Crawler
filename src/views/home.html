@@ -58,7 +58,7 @@
               <select class="form-control me-2" id="searchMode">
                 <option value="title">Search by Title</option>
                 <option value="venue">Search by Venue</option>
-                <option value="date">Search by Start Date</option>
+                <option value="startDate">Search by Start Date</option>
               </select>
               <input
                 class="form-control me-2"
@@ -219,28 +219,32 @@
     loadPage(1);
 
     document
-      .getElementById("searchForm")
-      .addEventListener("submit", function (event) {
+    .getElementById("searchForm")
+    .addEventListener("submit", function (event) {
         event.preventDefault();
 
         const searchValue = document.getElementById("searchInput").value;
-        loadPageSearch(1, searchValue);
+        const searchMode = document.getElementById("searchMode").value;
+        // document.write(searchMode);
+        
+        loadPageSearch(1, searchValue, searchMode);
+
         if (searchValue) {
           $("#pagination-container").pagination({
-            dataSource: `http://localhost:8080/IT_Conferences/home/searchTitle?name=${searchValue}&page=1`,
+            dataSource: `http://localhost:8080/IT_Conferences/home/search${searchMode.charAt(0).toUpperCase() + searchMode.slice(1)}?name=${searchValue}&page=1`,
             locator: "data",
             totalNumberLocator: function (response) {
               return response.totalConf;
             },
             pageSize: 10,
             afterPageOnClick: function (event, pageNumber) {
-              loadPageSearch(pageNumber, searchValue);
+              loadPageSearch(pageNumber, searchValue, searchMode);
             },
             afterPreviousOnClick: function (event, pageNumber) {
-              loadPageSearch(pageNumber, searchValue);
+              loadPageSearch(pageNumber, searchValue, searchMode);
             },
             afterNextOnClick: function (event, pageNumber) {
-              loadPageSearch(pageNumber, searchValue);
+              loadPageSearch(pageNumber, searchValue, searchMode);
             },
           });
           loadPageSearch(1, searchValue);
@@ -266,20 +270,20 @@
         }
       });
 
-    function loadPageSearch(page, searchValue) {
-      const tableBody = $(".table tbody");
-      tableBody.empty();
+      function loadPageSearch(page, searchValue, searchMode) {
+  const tableBody = $(".table tbody");
+  tableBody.empty();
 
-      $.ajax({
-        url: `http://localhost:8080/IT_Conferences/home/searchTitle?name=${searchValue}&page=${page}`,
-      })
-        .then((result) => {
-          console.log(result.data);
-          displayData(result.data);
-        })
-        .catch((err) => {
-          console.log("Error from server:", err);
-        });
-    }
+  $.ajax({
+    url: `http://localhost:8080/IT_Conferences/home/search${searchMode.charAt(0).toUpperCase() + searchMode.slice(1)}?name=${searchValue}&page=${page}`,
+  })
+    .then((result) => {
+      // console.log(result)
+      displayData(result.data);
+    })
+    .catch((err) => {
+      console.log("Error from server:", err);
+    });
+}
   </script>
 </html>
