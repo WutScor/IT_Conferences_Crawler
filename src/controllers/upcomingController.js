@@ -18,6 +18,9 @@ const sequelize = require("sequelize");
 //   }
 // };
 
+const currentDate = new Date();
+const formattedCurrentDate = moment(currentDate).format("YYYY-MM-DD");
+
 let getUpcomingPage = async (req, res) => {
   let page = Number(req.query.page) || 1; // get the current page number from the query string
   let limit = 10; // limit number of conferences viewed
@@ -93,7 +96,7 @@ const searchConfByVenue = async (req, res, next) => {
     let limit = 10; // limit number of conferences viewed
     let offset = (page - 1) * limit; // where to select from db
     const searchValue = String(req.query.name);
-    console.log('Search Value:', searchValue);
+    console.log("Search Value:", searchValue);
     const data = await db.Conferences.findAll({
       where: sequelize.literal(`
       LOWER(Venue) LIKE LOWER('%${searchValue}%') AND STR_TO_DATE(StartDate, '%d-%m-%Y') > '${formattedCurrentDate}'
@@ -126,16 +129,20 @@ const searchConfByStartDate = async (req, res, next) => {
     let limit = 10; // limit number of conferences viewed
     let offset = (page - 1) * limit; // where to select from db
     const searchValue = String(req.query.name);
-    console.log('Search Value:', searchValue); // Log the searchValue
+    console.log("Search Value:", searchValue); // Log the searchValue
 
     const data = await db.Conferences.findAll({
-      where: sequelize.literal(`StartDate = '${searchValue}' AND STR_TO_DATE(StartDate, '%d-%m-%Y') > '${formattedCurrentDate}'`),
+      where: sequelize.literal(
+        `StartDate = '${searchValue}' AND STR_TO_DATE(StartDate, '%d-%m-%Y') > '${formattedCurrentDate}'`
+      ),
       limit: limit,
       offset: offset,
     });
 
     let totalItems = await db.Conferences.count({
-      where: sequelize.literal(`StartDate = '${searchValue}' AND STR_TO_DATE(StartDate, '%d-%m-%Y') > '${formattedCurrentDate}'`),
+      where: sequelize.literal(
+        `StartDate = '${searchValue}' AND STR_TO_DATE(StartDate, '%d-%m-%Y') > '${formattedCurrentDate}'`
+      ),
     }); // total records of db
     let totalPages = Math.ceil(totalItems / limit);
 
@@ -156,5 +163,3 @@ module.exports = {
   searchConfByVenue: searchConfByVenue,
   searchConfByStartDate: searchConfByStartDate,
 };
-
-
