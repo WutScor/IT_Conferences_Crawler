@@ -38,6 +38,105 @@ let getOverPage = async (req, res) => {
   }
 };
 
+const searchConfByTitle = async (req, res, next) => {
+  try {
+    let page = Number(req.query.page) || 1; // get the current page number from the query string
+    let limit = 10; // limit number of conferences viewed
+    let offset = (page - 1) * limit; // where to select from db
+    const searchValue = String(req.query.name);
+
+    const data = await db.Conferences.findAll({
+      where: sequelize.literal(`
+      LOWER(Title) LIKE LOWER('%${searchValue}%') AND STR_TO_DATE(EndDate, '%d-%m-%Y') < '${formattedCurrentDate}'
+      `),
+      limit: limit,
+      offset: offset,
+    });
+
+    let totalItems = await db.Conferences.count({
+      where: sequelize.literal(`
+      LOWER(Title) LIKE LOWER('%${searchValue}%') AND STR_TO_DATE(EndDate, '%d-%m-%Y') < '${formattedCurrentDate}'
+      `),
+    }); // total records of db
+    let totalPages = Math.ceil(totalItems / limit);
+
+    res.json({
+      data: JSON.parse(JSON.stringify(data)),
+      totalPages: totalPages,
+      currentPage: page,
+      totalConf: totalItems,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const searchConfByVenue = async (req, res, next) => {
+  try {
+    let page = Number(req.query.page) || 1; // get the current page number from the query string
+    let limit = 10; // limit number of conferences viewed
+    let offset = (page - 1) * limit; // where to select from db
+    const searchValue = String(req.query.name);
+    console.log('Search Value:', searchValue);
+    const data = await db.Conferences.findAll({
+      where: sequelize.literal(`
+      LOWER(Venue) LIKE LOWER('%${searchValue}%') AND STR_TO_DATE(EndDate, '%d-%m-%Y') < '${formattedCurrentDate}'
+      `),
+      limit: limit,
+      offset: offset,
+    });
+
+    let totalItems = await db.Conferences.count({
+      where: sequelize.literal(`
+      LOWER(Venue) LIKE LOWER('%${searchValue}%') AND STR_TO_DATE(EndDate, '%d-%m-%Y') < '${formattedCurrentDate}'
+      `),
+    }); // total records of db
+    let totalPages = Math.ceil(totalItems / limit);
+
+    res.json({
+      data: JSON.parse(JSON.stringify(data)),
+      totalPages: totalPages,
+      currentPage: page,
+      totalConf: totalItems,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const searchConfByStartDate = async (req, res, next) => {
+  try {
+    let page = Number(req.query.page) || 1; // get the current page number from the query string
+    let limit = 10; // limit number of conferences viewed
+    let offset = (page - 1) * limit; // where to select from db
+    const searchValue = String(req.query.name);
+    console.log('Search Value:', searchValue); // Log the searchValue
+
+    const data = await db.Conferences.findAll({
+      where: sequelize.literal(`StartDate = '${searchValue}' AND STR_TO_DATE(EndDate, '%d-%m-%Y') < '${formattedCurrentDate}'`),
+      limit: limit,
+      offset: offset,
+    });
+
+    let totalItems = await db.Conferences.count({
+      where: sequelize.literal(`StartDate = '${searchValue}' AND STR_TO_DATE(EndDate, '%d-%m-%Y') < '${formattedCurrentDate}'`),
+    }); // total records of db
+    let totalPages = Math.ceil(totalItems / limit);
+
+    res.json({
+      data: JSON.parse(JSON.stringify(data)),
+      totalPages: totalPages,
+      currentPage: page,
+      totalConf: totalItems,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getOverPage: getOverPage,
+  searchConfByTitle: searchConfByTitle,
+  searchConfByVenue: searchConfByVenue,
+  searchConfByStartDate: searchConfByStartDate,
 };
