@@ -39,9 +39,6 @@
             <li class="nav-item">
               <a class="nav-link" href="over">Over Conferences</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="planning">Conference Planning</a>
-            </li>
           </ul>
         </div>
       </nav>
@@ -85,7 +82,7 @@
                   <button
                     class="btn btn-outline-success"
                     type="button"
-                    onclick="sortTable('title')"
+                    onclick="sortTable(2)"
                   >
                     &#8595;
                   </button>
@@ -95,7 +92,7 @@
                   <button
                     class="btn btn-outline-success"
                     type="button"
-                    onclick="sortTable(0)"
+                    onclick="sortTable(3)"
                   >
                     &#8595;
                   </button>
@@ -105,7 +102,7 @@
                   <button
                     class="btn btn-outline-success"
                     type="button"
-                    onclick="sortTable('startDate')"
+                    onclick="sortTable(4)"
                   >
                     &#8595;
                   </button>
@@ -115,7 +112,7 @@
                   <button
                     class="btn btn-outline-success"
                     type="button"
-                    onclick="sortTable('endDate')"
+                    onclick="sortTable(5)"
                   >
                     &#8595;
                   </button>
@@ -125,7 +122,7 @@
                   <button
                     class="btn btn-outline-success"
                     type="button"
-                    onclick="sortTable(1)"
+                    onclick="sortTable(6)"
                   >
                     &#8595;
                   </button>
@@ -291,66 +288,77 @@
     }
 
     function sortTable(n) {
-      var table,
-        rows,
-        switching,
-        i,
-        x,
-        y,
-        shouldSwitch,
-        dir,
-        switchcount = 0;
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount;
       table = document.getElementById("myTable2");
       switching = true;
-      // Set the sorting direction to ascending:
+      switchcount = 0;
+
       dir = "asc";
-      /* Make a loop that will continue until
-      no switching has been done: */
+
       while (switching) {
-        // Start by saying: no switching is done:
         switching = false;
         rows = table.rows;
-        /* Loop through all table rows (except the
-        first, which contains table headers): */
+
         for (i = 1; i < rows.length - 1; i++) {
-          // Start by saying there should be no switching:
           shouldSwitch = false;
-          /* Get the two elements you want to compare,
-          one from current row and one from the next: */
+
           x = rows[i].getElementsByTagName("TD")[n];
           y = rows[i + 1].getElementsByTagName("TD")[n];
-          /* Check if the two rows should switch place,
-          based on the direction, asc or desc: */
-          if (n == 0) {
+
+          if (n == 3) {
             if (dir == "asc") {
               if (Number(x.innerHTML) > Number(y.innerHTML)) {
-                // If so, mark as a switch and break the loop:
                 shouldSwitch = true;
                 break;
               }
             } else if (dir == "desc") {
               if (Number(x.innerHTML) < Number(y.innerHTML)) {
-                // If so, mark as a switch and break the loop:
                 shouldSwitch = true;
                 break;
               }
             }
-          } else if (n == 1) {
+          } else if (n == 2) {
+            const char1 = String(x.textContent).toLowerCase();
+            const char2 = String(y.textContent).toLowerCase();
+            const compareValue = char1.localeCompare(char2);
+
             if (dir == "asc") {
-              const string1 = x.innerHTML.toLowerCase();
-              const string2 = y.innerHTML.toLowerCase();
-              const compareValue = string1.localeCompare(string2);
               if (compareValue == 1) {
-                // If so, mark as a switch and break the loop:
                 shouldSwitch = true;
                 break;
               }
             } else if (dir == "desc") {
-              const string1 = x.innerHTML.toLowerCase();
-              const string2 = y.innerHTML.toLowerCase();
-              const compareValue = string1.localeCompare(string2);
               if (compareValue == -1) {
-                // If so, mark as a switch and break the loop:
+                shouldSwitch = true;
+                break;
+              }
+            }
+          } else if (n == 6) {
+            const string1 = x.innerHTML.toLowerCase();
+            const string2 = y.innerHTML.toLowerCase();
+            const compareValue = string1.localeCompare(string2);
+
+            if (dir == "asc") {
+              if (compareValue == 1) {
+                shouldSwitch = true;
+                break;
+              }
+            } else if (dir == "desc") {
+              if (compareValue == -1) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+          } else if (n == 4 || n == 5) {
+            var dx = new Date(x.innerHTML.split("-").reverse().join("-"));
+            var dy = new Date(y.innerHTML.split("-").reverse().join("-"));
+            if (dir == "asc") {
+              if (dx > dy) {
+                shouldSwitch = true;
+                break;
+              }
+            } else if (dir == "desc") {
+              if (dx < dy) {
                 shouldSwitch = true;
                 break;
               }
@@ -358,15 +366,10 @@
           }
         }
         if (shouldSwitch) {
-          /* If a switch has been marked, make the switch
-          and mark that a switch has been done: */
           rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
           switching = true;
-          // Each time a switch is done, increase this count by 1:
           switchcount++;
         } else {
-          /* If no switching has been done AND the direction is "asc",
-          set the direction to "desc" and run the while loop again. */
           if (switchcount == 0 && dir == "asc") {
             dir = "desc";
             switching = true;

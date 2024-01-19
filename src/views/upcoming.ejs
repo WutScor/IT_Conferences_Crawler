@@ -42,9 +42,6 @@
             <li class="nav-item">
               <a class="nav-link" href="over">Over Conferences</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="planning">Conference Planning</a>
-            </li>
           </ul>
         </div>
       </nav>
@@ -57,12 +54,18 @@
         </div>
         <div class="row m-3">
           <div class="search container-fluid col-md-6 offset-md-0">
-            <form class="d-flex search-item" role="search">
+            <form class="d-flex search-item" role="search" id="searchForm">
+              <select class="form-control me-2" id="searchMode">
+                <option value="title">Search by Title</option>
+                <option value="venue">Search by Venue</option>
+                <option value="startDate">Search by Start Date</option>
+              </select>
               <input
                 class="form-control me-2"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
+                id="searchInput"
               />
               <button class="btn btn-outline-success" type="submit">
                 Search
@@ -72,16 +75,61 @@
         </div>
 
         <div class="row">
-          <table class="table table-hover">
+          <table id="myTable2" class="table table-hover">
             <thead class="head-table">
               <tr>
                 <th scope="col">Rank</th>
                 <th scope="col">Conference</th>
-                <th scope="col">Title</th>
-                <th scope="col">Impact Score</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">Venue</th>
+                <th scope="col">
+                  Title
+                  <button
+                    class="btn btn-outline-success"
+                    type="button"
+                    onclick="sortTable(2)"
+                  >
+                    &#8595;
+                  </button>
+                </th>
+                <th scope="col">
+                  Impact Score
+                  <button
+                    class="btn btn-outline-success"
+                    type="button"
+                    onclick="sortTable(3)"
+                  >
+                    &#8595;
+                  </button>
+                </th>
+                <th scope="col">
+                  Start Date
+                  <button
+                    class="btn btn-outline-success"
+                    type="button"
+                    onclick="sortTable(4)"
+                  >
+                    &#8595;
+                  </button>
+                </th>
+                <th scope="col">
+                  End Date
+                  <button
+                    class="btn btn-outline-success"
+                    type="button"
+                    onclick="sortTable(5)"
+                  >
+                    &#8595;
+                  </button>
+                </th>
+                <th scope="col">
+                  Venue
+                  <button
+                    class="btn btn-outline-success"
+                    type="button"
+                    onclick="sortTable(6)"
+                  >
+                    &#8595;
+                  </button>
+                </th>
               </tr>
             </thead>
             <tbody class="body-table design-title"></tbody>
@@ -170,5 +218,95 @@
     }
 
     loadPage(1);
+    function sortTable(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount;
+      table = document.getElementById("myTable2");
+      switching = true;
+      switchcount = 0;
+
+      dir = "asc";
+
+      while (switching) {
+        switching = false;
+        rows = table.rows;
+
+        for (i = 1; i < rows.length - 1; i++) {
+          shouldSwitch = false;
+
+          x = rows[i].getElementsByTagName("TD")[n];
+          y = rows[i + 1].getElementsByTagName("TD")[n];
+
+          if (n == 3) {
+            if (dir == "asc") {
+              if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                shouldSwitch = true;
+                break;
+              }
+            } else if (dir == "desc") {
+              if (Number(x.innerHTML) < Number(y.innerHTML)) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+          } else if (n == 2) {
+            const char1 = String(x.textContent).toLowerCase();
+            const char2 = String(y.textContent).toLowerCase();
+            const compareValue = char1.localeCompare(char2);
+
+            if (dir == "asc") {
+              if (compareValue == 1) {
+                shouldSwitch = true;
+                break;
+              }
+            } else if (dir == "desc") {
+              if (compareValue == -1) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+          } else if (n == 6) {
+            const string1 = x.innerHTML.toLowerCase();
+            const string2 = y.innerHTML.toLowerCase();
+            const compareValue = string1.localeCompare(string2);
+
+            if (dir == "asc") {
+              if (compareValue == 1) {
+                shouldSwitch = true;
+                break;
+              }
+            } else if (dir == "desc") {
+              if (compareValue == -1) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+          } else if (n == 4 || n == 5) {
+            var dx = new Date(x.innerHTML.split("-").reverse().join("-"));
+            var dy = new Date(y.innerHTML.split("-").reverse().join("-"));
+            if (dir == "asc") {
+              if (dx > dy) {
+                shouldSwitch = true;
+                break;
+              }
+            } else if (dir == "desc") {
+              if (dx < dy) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          switchcount++;
+        } else {
+          if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+          }
+        }
+      }
+    }
   </script>
 </html>

@@ -33,13 +33,10 @@ const HomeRouter = require("./route/homeRouter");
 const UpcomingRouter = require("./route/upcomingRouter");
 const RunningRouter = require("./route/runningRouter");
 const OverRouter = require("./route/overRouter");
-const PlanningRouter = require("./route/planningRouter");
-//const WebRouter = require("./route/web");
 
 // use router
 app.use("/data/IT_Conferences", HomeRouter);
 app.use("/data/IT_Conferences", UpcomingRouter);
 app.use("/data/IT_Conferences", RunningRouter);
 app.use("/data/IT_Conferences", OverRouter);
-app.use("/data/IT_Conferences", PlanningRouter);
 //app.use("/IT_Conferences", WebRouter);

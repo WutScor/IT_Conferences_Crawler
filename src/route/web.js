@@ -9,7 +9,6 @@ let initWebRoutes = (app) => {
   router.get("/upcoming", webController.getUpcomingPage);
   router.get("/running", webController.getRunningPage);
   router.get("/over", webController.getOverPage);
-  router.get("/planning", webController.getPlanningPage);
   return app.use("/", router);
 };
 

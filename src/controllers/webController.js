@@ -13,14 +13,9 @@ let getOverPage = (req, res) => {
   return res.render("over.ejs");
 };
 
-let getPlanningPage = (req, res) => {
-  return res.render("planning.ejs");
-};
-
 module.exports = {
   getHomePage: getHomePage,
   getUpcomingPage: getUpcomingPage,
   getRunningPage: getRunningPage,
   getOverPage: getOverPage,
-  getPlanningPage: getPlanningPage,
 };
